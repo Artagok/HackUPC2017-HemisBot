@@ -96,7 +96,7 @@ def send_message(text, chat_id, reply_markup=None):
         url += "&reply_markup={}".format(reply_markup)
     get_url(url)
 
-def send_location(chat_id, latitude, longitude, reply_markup=None)
+def send_location(chat_id, latitude, longitude, reply_markup=None):
     url = URL + "sendlocation?chat_id={}&latitude={}&longitude={}&parse_mode=Markdown".format(chat_id, latitude, longitude)
     if reply_markup:
         url += "&reply_markup={}".format(reply_markup)
