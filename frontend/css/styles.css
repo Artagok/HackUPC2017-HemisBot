@@ -58,7 +58,6 @@ header p{
 
 .button_pair .button_case {
 	float:left;
-	height: 100%;
 	width:50%;
 }
 
@@ -67,29 +66,57 @@ header p{
 	margin-top: 50px;
 	height:70px;
 	width:300px;
-	background-color: #fff;	
+	border:2px solid;
+	border-color:#6495ED;
+}
+
+.button_pair .button_case .button_button:hover {
+	border-color:#ffcc00;
 }
 
 .button_img {
+	position:relative;
 	float:left;
 	height:100%;
 	width: 30%;
-	background-color: #3271e7;
+	background-color: #31364A;
+}
+
+.button_img img {
+	position:absolute;
+	margin: auto;
+	top:0;
+	right: 0;
+	bottom:0;
+	left:0;
+	height:60px;
 }
 
 .button_txt {
+	background-color: #fff;
 	display:table;
 	float:left;
 	height: 100%;
 	width: 70%;
+	padding-top: 6px;
+}
+
+.button_button:hover .button_txt {
+	background-color: #6495ED;
 }
 
 .button_txt p {
+	color:#404040;
 	display: table-cell;
 	vertical-align: middle;
 	text-align: center;
-	font-size: 30px;
+	font-size: 18px;
 	font-weight: bold;
+	letter-spacing: -1px;
+}
+
+.button_button:hover p {
+	color:#ffcc00;
 }
 
 /*--------------------*/
@@ -104,4 +131,7 @@ header p{
     .button_pair .button_case {
     	width:100%;
     }
+    .button_pair {
+		height: 25%;
+	}
 }
