@@ -1,67 +1,73 @@
-# -*- coding: utf-8 -*-
-
-# import required libs
+# import needed libs:
 import json
 import requests
 import time
 import urllib
 
-# make random available
-from random import randint
+# import DB_SQLite:
+from db_sqlite import DB_SQLite
 
-# import the database
-from db_helper import DBHelper
+# access SQLite methods through 'db':
+db = DB_SQLite()
 
-db = DBHelper()
-
-# connect to the bot
+# personal pollution bot TOKEN. DELETE IT WHEN MAKING THE CODE PUBLIC:
 TOKEN = "464368472:AAGfh1lZGi-B7Afty2dY8GWgoS27vKUO1og"
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 
-""" receive the data from the message and convert it to json
-would be fast to have the string + json conversion in just one function.
-if there's an alternative of send_data calling get_data, apply it:
-def get_data(URL)
-    response = response.requests.get(URL)
-    content_string = response.content.decode("utf8") #make it a string
-    js = json.loads(content_string)
-    return js
-"""
-
-# get link string
+# the 'message' received is actually a link. Collect it:
 def get_url(url):
-    response = requests.get(URL)
+    response = requests.get(url)
     content = response.content.decode("utf8")
     return content
 
-# parse the content_string to the py library:
-def get_json_data(url):
-    content_string = get_url(URL)
-    js_data = json.loads(content_string)
-    return js_data
+# Now load that link to json:
+def get_json_from_url(url):
+    content = get_url(url)
+    js = json.loads(content)
+    return js
 
-# longpoll it: https://goo.gl/6HrKWZ
+# use Long Polling! don't overload Telegram with queries: keep
+# the connection opened and if there are any updates, pass them
+# always passing 'timeout' argument alongside get_updates:
 def get_updates(offset = None):
     url = URL + "getUpdates"
     if offset:
         url += "?offset={}".format(offset)
-    js = get_json_data(url)
+    js = get_json_from_url(url)
     return js
 
+# mange data updates:
 def get_last_update_id(updates):
     update_ids = []
     for update in updates["result"]:
         update_ids.append(int(update["update_id"]))
     return max(update_ids)
 
-# process the input data
+# most important! process the input and define the output:
 def handle_updates(updates):
     for update in updates["result"]:
         text = update["message"]["text"]
         chat = update["message"]["chat"]["id"]
-        # simply resend the chat
-        send_message(text, chat)
+        # start the analysis:
+        if text == "/start":
+            send_message("What up my boy! Tell me whatever...", chat)
+        else:
+            records = db.get_records(chat)
+            if text in records:
+                db.delete_record(text, chat)
+                send_message("Record deleted!", chat)
 
+            elif text == "Nil":
+                send_message("lol this man doesn't even like coffe", chat)
+            elif text == "Pau":
+                send_message("yoh this man can't sleep on the floor", chat)
+            else:
+                tosend_text = "You told me " + text + ". I'll save that. Your current list is (repeat an record to delete it):"
+                send_message(tosend_text, chat)
+                db.add_record(text, chat)
+                records = db.get_records(chat)
+                all_records = "\n".join(records)
+                send_message(all_records, chat)
 
 def get_last_chat_id_and_text(updates):
     num_updates = len(updates["result"])
@@ -69,15 +75,24 @@ def get_last_chat_id_and_text(updates):
     text = updates["result"][last_update]["message"]["text"]
     chat_id = updates["result"][last_update]["message"]["chat"]["id"]
     return (text, chat_id)
-#
 
-def send_message(text, chat_id, reply_markup = None):
+# call the customized keyboard and pass through the option (records) that should appear,
+# NOT USED YET:
+def special_keyboard(records):
+    keyboard = [[record] for record in records]
+    # remember, reply_markup is the object that contains the keybaord algonside other values:
+    reply_markup = {"keyboard":keyboard, "one_time_keyboard": True}
+    return json.dumps(reply_markup)
+
+# once the message text is passed, convert it to a proper link for Telegram to understand:
+def send_message(text, chat_id, reply_markup=None):
     text = urllib.parse.quote_plus(text)
-    url = URL + "sendMessage?text = {}&chat_id = {}&parse_mode = Markdown".format(text, chat_id)
+    url = URL + "sendMessage?text={}&chat_id={}&parse_mode=Markdown".format(text, chat_id)
     if reply_markup:
-        url += "&reply_markup = {}".format(reply_markup)
+        url += "&reply_markup={}".format(reply_markup)
     get_url(url)
 
+# get_updates is the responsible of the Long Polling:
 def main():
     db.setup()
     last_update_id = None
@@ -88,5 +103,7 @@ def main():
             handle_updates(updates)
         time.sleep(0.5)
 
+
 if __name__ == '__main__':
     main()
+# Ignasi Oliver, Pau Nunez, Nil Quera, @HACKUPC Fall 2017
