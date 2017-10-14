@@ -17,7 +17,6 @@ URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 # the 'message' received is actually a link. Collect it:
 def get_url(url):
     response = requests.get(url)
-    db.add_pure_url(response)
     content = response.content.decode("utf8")
     db.add_decoded_url(content)
     return content
