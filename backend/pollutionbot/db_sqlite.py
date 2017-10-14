@@ -8,9 +8,9 @@ class DB_SQLite:
 
     def setup(self):
         table_statement = "CREATE TABLE IF NOT EXISTS records (description text, user text)"
-        pure_url = "CREATE TABLE IF NOT EXISTS pure_url (data text)"
-        decoded_url = "CREATE TABLE IF NOT EXISTS decoded_url (data text)"
-        json_url = "CREATE TABLE IF NOT EXISTS json_url (data text)"
+        pure_url = "CREATE TABLE IF NOT EXISTS pure_url (data blob)"
+        decoded_url = "CREATE TABLE IF NOT EXISTS decoded_url (data blob)"
+        json_url = "CREATE TABLE IF NOT EXISTS json_url (data blob)"
         # WHATCHOUT! Added two indeces to make both get_records() and get_items() faster,
         # but chan take up too much space when dealing with a lot of data
         record_index = "CREATE INDEX IF NOT EXISTS recordIndex ON records (description ASC)"
