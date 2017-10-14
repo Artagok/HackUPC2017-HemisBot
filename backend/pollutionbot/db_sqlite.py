@@ -16,7 +16,6 @@ class DB_SQLite:
         record_index = "CREATE INDEX IF NOT EXISTS recordIndex ON records (description ASC)"
         owner_index = "CREATE INDEX IF NOT EXISTS ownIndex ON records (user ASC)"
         self.conn.execute(table_statement)
-        self.conn.execute(pure_url)
         self.conn.execute(decoded_url)
         self.conn.execute(json_url)
         self.conn.execute(record_index)
