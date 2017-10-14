@@ -10,7 +10,7 @@ import urllib
 from random import randint
 
 # import the database
-from dbhelper import DBHelper
+from db_helper import DBHelper
 
 # connect to the bot
 TOKEN = "464368472:AAGfh1lZGi-B7Afty2dY8GWgoS27vKUO1og"
