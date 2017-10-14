@@ -9,8 +9,13 @@ body {
 
 header {
 	width:100%;
-	height:25%;
+	height:150px;
 	background-color: white;
+}
+
+header #logo_chatbot {
+	height: 150px;
+	width: 150px;
 }
 
 header nav {
@@ -133,6 +138,24 @@ header p{
     }
     .button_pair {
 		height: 25%;
+	}
+}
+
+@media only screen and (max-width:400px) {
+	header {
+		top:0;
+		position:fixed;
+		height: 120px;
+		z-index: 1;
+	}
+
+	#wrap {
+		margin-top:100px;
+	}
+
+	header #logo_chatbot {
+		height: 120px;
+		width: 120px;
 	}
 }
 

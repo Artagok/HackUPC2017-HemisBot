@@ -5,12 +5,6 @@ import time
 import urllib
 import csv
 
-# import DB_SQLite:
-from db_sqlite import DB_SQLite
-
-# access SQLite methods through 'db':
-db = DB_SQLite()
-
 # personal pollution bot TOKEN. DELETE IT WHEN MAKING THE CODE PUBLIC:
 TOKEN = "458885814:AAH0dsg7soXTg-Au9_-vqIq0q0GGyDOEB8g"
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
@@ -57,34 +51,34 @@ def handle_updates(updates):
                 send_message("Hi! I'm the tourist bot.\nType the number of the topic you want to know about:\n1) Monuments\n2) Hospitals\n3) Tourist Info Points", chat)
             else:
                 if received_text == "1":
-                    send_message("Please, tell me the monument you are interested in:",chat)
-                    with open("monuments.csv") as f:
-                        reader = csv.reader(f, delimiter=';')
-                        realsend_message = ""
-                        for row in reader:
-                            tosend_message = row[0]
-                            realsend_message += "- " + tosend_message + "\n"
-                        send_message(realsend_message,chat)
+                    send_message("Dear 'guiri', here you have a brief summary of some of the most interesting attractions in Barcelona:",chat)
+                    time.sleep(3)
+                    send_message("- Sagrada Família\nBasic price: 15€\nhttp://www.sagradafamilia.org/",chat)
+                    time.sleep(5)
+                    send_message("- La Pedrera\nBasic price: 22€\nhttps://www.lapedrera.com/en/home",chat)
+                    time.sleep(5)
+                    send_message("- Park Güell\nBasic price: 7€\nhttps://www.parkguell.cat/en/",chat)
+                    time.sleep(5)
+                    send_message("- Museu Picasso\nBasic price: 11€\nhttp://www.museupicasso.bcn.cat/en/",chat)
+                    time.sleep(5)
+                    send_message("- Font Màgica de Montjuïc\nFree entrance\nhttp://www.barcelonaturisme.com/wv3/en/page/614/font-magica.html",chat)
+                    
+                    time.sleep(2)
+                    send_message("I hope I helped you! Now, do you need more info?\n1) Monuments\n2) Hospitals\n3) Tourist Info Points", chat)
                 elif received_text == "2":
-                    send_message("Use this link to find the nearest hospital:\nhttps://goo.gl/9FaFPd",chat)
+                    send_message("Use this link to find the nearest hospitals:\nhttps://goo.gl/9FaFPd",chat)
+                    time.sleep(2)
                     send_message("Also, you may want to call the Barcelona emergency phone number: 112",chat)
-                elif received_text == "3" and not topic1:
+                    time.sleep(2)
+                    send_message("Was this helpful? Keep throwing questions at me!\n1) Monuments\n2) Hospitals\n3) Tourist Info Points", chat)
+                elif received_text == "3":
                     send_message("Enter this link to find the main tourist info points in Barcelona\nhttps://goo.gl/Gk6p9j",chat)
+                    time.sleep(2)
                     send_message("Remember that catalans are very generous, so don't hesitate to ask them for help in case you need it.",chat)
-
-                elif received_text == ("Sagrada Familia" or "sagrada familia" or "Sagrada familia"):
-                    with open("monuments.csv") as f:
-                        reader = csv.reader(f, delimiter=';')
-                        rows = list(reader)
-                        send_message(rows[3], chat)
-
+                    time.sleep(2)
+                    send_message("Do you need more info?\n1) Monuments\n2) Hospitals\n3) Tourist Info Points", chat)
                 else:
-                    tosend_text = "You told me " + received_text + ". I'll save that. Your current list is (repeat an record to delete it):"
-                    send_message(tosend_text, chat)
-                    db.add_record(received_text, chat)
-                    records = db.get_records(chat)
-                    all_records = "\n".join(records)
-                    send_message(all_records, chat)
+                    send_message("Unexpected error", chat)
         except KeyError: # usually at the start of the conversation
             pass
             
@@ -113,7 +107,6 @@ def send_message(text, chat_id, reply_markup=None):
 
 # get_updates is the responsible of the Long Polling:
 def main():
-    db.setup()
     last_update_id = None
     while True:
         updates = get_updates(last_update_id)
