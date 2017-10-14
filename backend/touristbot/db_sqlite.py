@@ -2,7 +2,7 @@ import sqlite3
 
 class DB_SQLite:
 
-    def __init__(self, dbname="pollutionbot.sqlite"):
+    def __init__(self, dbname="touristbot.sqlite"):
         self.dbname = dbname
         self.conn = sqlite3.connect(dbname)
 

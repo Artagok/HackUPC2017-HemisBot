@@ -3,6 +3,7 @@ import json
 import requests
 import time
 import urllib
+import csv
 
 # import DB_SQLite:
 from db_sqlite import DB_SQLite
@@ -43,6 +44,8 @@ def get_last_update_id(updates):
         update_ids.append(int(update["update_id"]))
     return max(update_ids)
 
+
+
 # most important! process the input and define the output:
 def handle_updates(updates):
     for update in updates["result"]:
@@ -51,17 +54,30 @@ def handle_updates(updates):
             chat = update["message"]["chat"]["id"]
             # start the analysis:
             if received_text == "/start":
-                send_message("Hi! I'm the tourist bot", chat)
+                send_message("Hi! I'm the tourist bot.\nType the number of the topic you want to know about:\n1) Monuments\n2) Hospitals\n3) Tourist Info Points", chat)
             else:
-                records = db.get_records(chat)
-                if received_text in records:
-                    db.delete_record(received_text, chat)
-                    send_message("Record deleted!", chat)
+                if received_text == "1":
+                    send_message("Please, tell me the monument you are interested in:",chat)
+                    with open("monuments.csv") as f:
+                        reader = csv.reader(f, delimiter=';')
+                        realsend_message = ""
+                        for row in reader:
+                            tosend_message = row[0]
+                            realsend_message += "- " + tosend_message + "\n"
+                        send_message(realsend_message,chat)
+                elif received_text == "2":
+                    send_message("Use this link to find the nearest hospital:\nhttps://goo.gl/9FaFPd",chat)
+                    send_message("Also, you may want to call the Barcelona emergency phone number: 112",chat)
+                elif received_text == "3" and not topic1:
+                    send_message("Enter this link to find the main tourist info points in Barcelona\nhttps://goo.gl/Gk6p9j",chat)
+                    send_message("Remember that catalans are very generous, so don't hesitate to ask them for help in case you need it.",chat)
 
-                elif received_text == "Nil":
-                    send_message("lol this man doesn't even like coffe", chat)
-                elif received_text == "Pau":
-                    send_message("yoh this man can't sleep on the floor", chat)
+                elif received_text == ("Sagrada Familia" or "sagrada familia" or "Sagrada familia"):
+                    with open("monuments.csv") as f:
+                        reader = csv.reader(f, delimiter=';')
+                        rows = list(reader)
+                        send_message(rows[3], chat)
+
                 else:
                     tosend_text = "You told me " + received_text + ". I'll save that. Your current list is (repeat an record to delete it):"
                     send_message(tosend_text, chat)
@@ -105,7 +121,6 @@ def main():
             last_update_id = get_last_update_id(updates) + 1
             handle_updates(updates)
         time.sleep(0.5)
-
 
 if __name__ == '__main__':
     main()
