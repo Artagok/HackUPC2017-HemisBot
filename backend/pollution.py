@@ -48,27 +48,27 @@ def handle_updates(updates):
     for update in updates["result"]:
         try:
             received_text = update["message"]["text"]
-                chat = update["message"]["chat"]["id"]
-                # start the analysis:
-                if received_text == "/start":
-                    send_message("What up my boy! Tell me whatever...", chat)
-                else:
-                    records = db.get_records(chat)
-                    if received_text in records:
-                        db.delete_record(received_text, chat)
-                        send_message("Record deleted!", chat)
+            chat = update["message"]["chat"]["id"]
+            # start the analysis:
+            if received_text == "/start":
+                send_message("What up my boy! Tell me whatever...", chat)
+            else:
+                records = db.get_records(chat)
+                if received_text in records:
+                    db.delete_record(received_text, chat)
+                    send_message("Record deleted!", chat)
 
-                    elif received_text == "Nil":
-                        send_message("lol this man doesn't even like coffe", chat)
-                    elif received_text == "Pau":
-                        send_message("yoh this man can't sleep on the floor", chat)
-                    else:
-                        tosend_text = "You told me " + received_text + ". I'll save that. Your current list is (repeat an record to delete it):"
-                        send_message(tosend_text, chat)
-                        db.add_record(received_text, chat)
-                        records = db.get_records(chat)
-                        all_records = "\n".join(records)
-                        send_message(all_records, chat)
+                elif received_text == "Nil":
+                    send_message("lol this man doesn't even like coffe", chat)
+                elif received_text == "Pau":
+                    send_message("yoh this man can't sleep on the floor", chat)
+                else:
+                    tosend_text = "You told me " + received_text + ". I'll save that. Your current list is (repeat an record to delete it):"
+                    send_message(tosend_text, chat)
+                    db.add_record(received_text, chat)
+                    records = db.get_records(chat)
+                    all_records = "\n".join(records)
+                    send_message(all_records, chat)
         except KeyError: # usually at the start of the conversation
             pass
 def get_last_chat_id_and_text(updates):
