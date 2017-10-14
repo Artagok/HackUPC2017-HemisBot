@@ -29,14 +29,14 @@ def get_data(URL)
 """
 
 # get link string
-def get_data(url):
+def get_url(url):
     response = requests.get(URL)
-    content_string = response.content.decode("utf8")
-    return content_string
+    content = response.content.decode("utf8")
+    return content
 
 # parse the content_string to the py library:
 def get_json_data(url):
-    content_string = get_data(URL)
+    content_string = get_url(URL)
     js_data = json.loads(content_string)
     return js_data
 
@@ -69,13 +69,6 @@ def get_last_chat_id_and_text(updates):
     text = updates["result"][last_update]["message"]["text"]
     chat_id = updates["result"][last_update]["message"]["chat"]["id"]
     return (text, chat_id)
-
-
-def build_keyboard(items):
-    keyboard = [[item] for item in items]
-    # "reply_markup" includes various features of the keyboard.
-    reply_markup = {"keyboard":keyboard, "one_time_keyboard": True}
-    return json.dumps(reply_markup)
 #
 
 def send_message(text, chat_id, reply_markup = None):
