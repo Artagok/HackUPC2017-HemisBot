@@ -40,8 +40,8 @@ def get_updates(offset = None):
     url = URL + "getUpdates"
     if offset:
         url += "?offset={}".format(offset)
-    js_data = get_json_data(url)
-    return js_data
+    js = get_json_data(url)
+    return js
 
 def get_last_update_id(updates):
     update_ids = []
