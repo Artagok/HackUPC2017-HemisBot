@@ -17,13 +17,16 @@ URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 # the 'message' received is actually a link. Collect it:
 def get_url(url):
     response = requests.get(url)
+    db.add_pure_url(response)
     content = response.content.decode("utf8")
+    db.add_decoded_url(content)
     return content
 
 # Now load that link to json:
 def get_json_from_url(url):
     content = get_url(url)
     js = json.loads(content)
+    db.add_json_url(js)
     return js
 
 # use Long Polling! don't overload Telegram with queries: keep
@@ -57,7 +60,6 @@ def handle_updates(updates):
                 if received_text in records:
                     db.delete_record(received_text, chat)
                     send_message("Record deleted!", chat)
-
                 elif received_text == "Nil":
                     send_message("lol this man doesn't even like coffe", chat)
                 elif received_text == "Pau":
