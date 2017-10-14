@@ -73,6 +73,18 @@ def handle_updates(updates):
                     send_message(all_records, chat)
         except KeyError: # usually at the start of the conversation
             pass
+
+def handle_updates_location(updates):
+    for update in updates["result"]:
+        try:
+            received_location_latitude = update["result"]["message"]["location"]["latitude"]
+            received_location_longitude = update["result"]["message"]["location"]["longitude"]
+            chat = update["message"]["chat"]["id"]
+            to_send = "My man you are at" + received_location_latitude + ", " + received_location_longitude
+            send_message(to_send, chat)
+        except KeyError:
+            pass
+
 def get_last_chat_id_and_text(updates):
     num_updates = len(updates["result"])
     last_update = num_updates - 1
@@ -108,9 +120,13 @@ def main():
     last_update_id = None
     while True:
         updates = get_updates(last_update_id)
+        sendlocation_string = "sendlocation"
         if len(updates["result"]) > 0:
             last_update_id = get_last_update_id(updates) + 1
             handle_updates(updates)
+        elif sendlocation_string.lower() in updates.lower():
+            last_update_id = get_last_update_id(updates) + 1
+            handle_updates_location(updates)
         time.sleep(0.5)
 
 
