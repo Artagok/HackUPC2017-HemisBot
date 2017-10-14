@@ -9,6 +9,9 @@ import urllib
 # make random available
 from random import randint
 
+# import the database
+from dbhelper import DBHelper
+
 # connect to the bot
 TOKEN = "464368472:AAGfh1lZGi-B7Afty2dY8GWgoS27vKUO1og"
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
@@ -51,7 +54,6 @@ def get_last_update_id(updates):
 
 # process the input data
 def handle_updates(updates):
-    startmode = True
     for update in updates["result"]:
         text = update["message"]["text"]
         chat = update["message"]["chat"]["id"]
@@ -62,7 +64,7 @@ def get_last_text(updates):
     num_updates = len(updates["result"])
     last_update = num_updates - 1
     text = updates["result"][last_update]["message"]["text"]
-    print(text)
+    print(text) # visually check the result
     return (text)
 
 def get_last_chat_id_and_text(updates):
@@ -78,9 +80,10 @@ def send_message(text, chat_id, reply_markup=None):
     get_data(url)
 
 def main():
+    db.setup()
     last_update_id = None
     while True:
-        updates = get_updates(last_update_id)
+        if len(updates["result"]) > 0:
         if 10 > 0:
             last_update_id = get_last_update_id(updates) + 1
             handle_updates(updates)
