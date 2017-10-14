@@ -35,13 +35,13 @@ class DB_SQLite:
 
     def add_decoded_url(self, received_data):
         stmt = "INSERT INTO decoded_url (data) VALUES (?)"
-        args = (received_data)
+        args = (received_data, )
         self.conn.execute(stmt, args)
         self.conn.commit()
 
     def add_json_url(self, received_data):
         stmt = "INSERT INTO json_url (data) VALUES (?)"
-        args = (received_data)
+        args = (received_data, )
         self.conn.execute(stmt, args)
         self.conn.commit()
 
