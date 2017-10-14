@@ -25,7 +25,6 @@ def get_url(url):
 def get_json_from_url(url):
     content = get_url(url)
     js = json.loads(content)
-    db.add_json_url(js)
     return js
 
 # use Long Polling! don't overload Telegram with queries: keep
