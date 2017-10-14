@@ -53,6 +53,8 @@ def handle_updates(updates):
             # start the analysis:
             if received_text == "/start":
                 send_message("What up my boy! Tell me whatever...", chat)
+            elif received_text == "locate me":
+                send_location(chat, 41.3880040, 2.1132800, reply_markup=None)
             else:
                 records = db.get_records(chat)
                 if received_text in records:
@@ -90,6 +92,12 @@ def special_keyboard(records):
 def send_message(text, chat_id, reply_markup=None):
     text = urllib.parse.quote_plus(text)
     url = URL + "sendMessage?text={}&chat_id={}&parse_mode=Markdown".format(text, chat_id)
+    if reply_markup:
+        url += "&reply_markup={}".format(reply_markup)
+    get_url(url)
+
+def send_location(chat_id, latitude, longitude, reply_markup=None)
+    url = URL + "sendlocation?chat_id={}&latitude={}&longitude={}&parse_mode=Markdown".format(chat_id, latitude, longitude)
     if reply_markup:
         url += "&reply_markup={}".format(reply_markup)
     get_url(url)
