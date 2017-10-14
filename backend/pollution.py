@@ -64,7 +64,6 @@ def send_message(text, chat_id, reply_markup=None):
     get_data(url)
 
 def main():
-    db.setup()
     last_update_id = None
     while True:
         updates = get_updates(last_update_id)
