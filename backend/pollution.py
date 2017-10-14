@@ -29,7 +29,7 @@ def get_json_from_url(url):
 # use Long Polling! don't overload Telegram with queries: keep
 # the connection opened and if there are any updates, pass them
 # always passing 'timeout' argument alongside get_updates:
-def get_updates(offset = None):
+def get_updates(offset=None):
     url = URL + "getUpdates"
     if offset:
         url += "?offset={}".format(offset)
