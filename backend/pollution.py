@@ -46,25 +46,25 @@ def get_last_update_id(updates):
 # most important! process the input and define the output:
 def handle_updates(updates):
     for update in updates["result"]:
-        text = update["message"]["text"]
+        received_text = update["message"]["text"]
         chat = update["message"]["chat"]["id"]
         # start the analysis:
-        if text == "/start":
+        if received_text == "/start":
             send_message("What up my boy! Tell me whatever...", chat)
         else:
             records = db.get_records(chat)
-            if text in records:
-                db.delete_record(text, chat)
+            if received_text in records:
+                db.delete_record(received_text, chat)
                 send_message("Record deleted!", chat)
 
-            elif text == "Nil":
+            elif received_text == "Nil":
                 send_message("lol this man doesn't even like coffe", chat)
-            elif text == "Pau":
+            elif received_text == "Pau":
                 send_message("yoh this man can't sleep on the floor", chat)
             else:
-                tosend_text = "You told me " + text + ". I'll save that. Your current list is (repeat an record to delete it):"
+                tosend_text = "You told me " + received_text + ". I'll save that. Your current list is (repeat an record to delete it):"
                 send_message(tosend_text, chat)
-                db.add_record(text, chat)
+                db.add_record(received_text, chat)
                 records = db.get_records(chat)
                 all_records = "\n".join(records)
                 send_message(all_records, chat)
