@@ -1,0 +1,107 @@
+* {
+	font-family: Arial;
+}
+
+body {
+	background: #6495ED;
+	margin: 0px;
+}
+
+header {
+	width:100%;
+	height:25%;
+	background-color: white;
+}
+
+header nav {
+	display:table;
+	margin:auto;
+}
+
+header nav * {
+	float:left;
+	display:block;
+}
+
+header p{
+	width: 270px;
+	color: grey;
+	font-size: 50px;
+	font-family: Arial;
+
+}
+
+#logo_chatbot {
+	width:150px;
+}
+
+#wrap {
+	width: 100%;
+	height: 100%;
+}
+
+#footer {
+	position:fixed;
+	left:0px;
+	bottom:0px;
+	width: 100%;
+	text-align: center;
+	font-size: 15px;
+	opacity: 0.5;
+}
+
+.button_pair {
+	width:100%;
+	height:200px;
+	margin-bottom: 10px;
+}
+
+.button_pair .button_case {
+	float:left;
+	height: 100%;
+	width:50%;
+}
+
+.button_pair .button_case .button_button {
+	margin:auto;
+	margin-top: 50px;
+	height:70px;
+	width:300px;
+	background-color: #fff;	
+}
+
+.button_img {
+	float:left;
+	height:100%;
+	width: 30%;
+	background-color: #3271e7;
+}
+
+.button_txt {
+	display:table;
+	float:left;
+	height: 100%;
+	width: 70%;
+}
+
+.button_txt p {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	font-size: 30px;
+	font-weight: bold;
+}
+
+/*--------------------*/
+
+@media only screen and (max-width: 710px) {
+    header p {
+    	display:none;
+    }
+    #footer {
+		font-size: 10px;
+    }
+    .button_pair .button_case {
+    	width:100%;
+    }
+}
