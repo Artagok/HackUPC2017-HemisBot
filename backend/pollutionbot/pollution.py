@@ -124,7 +124,7 @@ def main():
         if len(updates["result"]) > 0:
             last_update_id = get_last_update_id(updates) + 1
             handle_updates(updates)
-        elif sendlocation_string.lower() in updates.lower():
+        elif sendlocation_string in updates:
             last_update_id = get_last_update_id(updates) + 1
             handle_updates_location(updates)
         time.sleep(0.5)
