@@ -62,12 +62,6 @@ def handle_updates(updates):
         # simply resend the chat
         send_message(text, chat)
 
-def get_last_text(updates):
-    num_updates = len(updates["result"])
-    last_update = num_updates - 1
-    text = updates["result"][last_update]["message"]["text"]
-    print(text) # visually check the result
-    return (text)
 
 def get_last_chat_id_and_text(updates):
     num_updates = len(updates["result"])
@@ -76,10 +70,20 @@ def get_last_chat_id_and_text(updates):
     chat_id = updates["result"][last_update]["message"]["chat"]["id"]
     return (text, chat_id)
 
-def send_message(text, chat_id, reply_markup=None):
+
+def build_keyboard(items):
+    keyboard = [[item] for item in items]
+    # "reply_markup" includes various features of the keyboard.
+    reply_markup = {"keyboard":keyboard, "one_time_keyboard": True}
+    return json.dumps(reply_markup)
+#
+
+def send_message(text, chat_id, reply_markup = None):
     text = urllib.parse.quote_plus(text)
-    url = URL + "sendMessage?text={}&chat_id={}&parse_mode=Markdown".format(text, chat_id)
-    get_data(url)
+    url = URL + "sendMessage?text = {}&chat_id = {}&parse_mode = Markdown".format(text, chat_id)
+    if reply_markup:
+        url += "&reply_markup = {}".format(reply_markup)
+    get_url(url)
 
 def main():
     db.setup()
