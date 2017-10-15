@@ -55,7 +55,7 @@ def handle_updates(updates):
             received_longitude = update["message"]["location"]["longitude"]
 
             #provisional_value = 0 + received_latitude
-            if isinstance(received_latitude, (int, float, complex)) == True:
+            if isinstance(received_latitude, float):
                 send_text_location = str(received_latitude) + ", " + str(received_longitude)
                 send_message("Thats a location man... You're on " + send_text_location, chat)
             else:
