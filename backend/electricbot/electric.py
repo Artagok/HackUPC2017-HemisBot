@@ -104,7 +104,7 @@ def handle_updates_location(updates):
             pass
 
 
-def check_place(received_latitude, received_longitud)
+def check_place(received_latitude, received_longitude):
     #nombre = nombre.upper()
     selected_coordinate = ''
     with open('electric.csv', 'r') as f:
