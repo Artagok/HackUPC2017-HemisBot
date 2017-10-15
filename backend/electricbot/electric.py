@@ -113,8 +113,8 @@ def check_place(received_latitude, received_longitude, chat):
       reader = csv.reader(f, delimiter=',')
       for row in reader:
         if row[10] is not None:
-            # send_message("HEY!", chat)
             value_row_lat = row[10]
+            send_message(value_row_lat, chat)
             if isinstance(value_row_lat, float):
                 result_lat = abs(value_row_lat - received_latitude)
                 if result_lat < selected_coordinate_latitude:
