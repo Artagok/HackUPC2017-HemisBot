@@ -122,12 +122,15 @@ def main():
         updates = get_updates(last_update_id)
         sendlocation_string = "location"
         if len(updates["result"]) > 0:
+            if sendlocation_string in updates:
+                handle_updates_location(updates)
+            else:
             last_update_id = get_last_update_id(updates) + 1
             handle_updates(updates)
         # elif sendlocation_string in updates:
-        else:
+        #else:
             # last_update_id = get_last_update_id(updates) + 1
-            handle_updates_location(updates)
+        #    handle_updates_location(updates)
         time.sleep(0.5)
 
 
