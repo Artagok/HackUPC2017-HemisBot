@@ -115,7 +115,7 @@ def check_place(received_latitude, received_longitude):
         if row[10] is not None:
             value_row_lat = row[10]
             value_row_long = row[11]
-            if isinstance(value_row_lat, float) and isinstance(value_row_long, float)
+            if isinstance(value_row_lat, float) and isinstance(value_row_long, float):
                 result_lat = abs(value_row_lat - received_latitude)
                 result_long = abs(value_row_long - received_longitude)
 
