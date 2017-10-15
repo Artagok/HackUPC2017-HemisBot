@@ -18,7 +18,6 @@ URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 def get_url(url):
     response = requests.get(url)
     content = response.content.decode("utf8")
-    db.add_decoded_url(content)
     return content
 
 # Now load that link to json:
