@@ -55,12 +55,12 @@ def handle_updates(updates):
             received_longitude = update["message"]["location"]["longitude"]
             try:
                 provisional_value = 4 + received_latitude
-            # if received_latitude is not None:
+                # if received_latitude is not None:
                 send_text_location = provisional_value + str(received_latitude) + ", " + str(received_longitude)
                 send_message("Thats a location man... You're on " + send_text_location, chat)
 
-            #else:
-        except TypeError:
+                #else:
+            except TypeError:
                 received_text = update["message"]["text"]
                 chat = update["message"]["chat"]["id"]
                 # start the analysis:
