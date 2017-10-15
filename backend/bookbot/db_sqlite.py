@@ -13,12 +13,9 @@ class DB_SQLite:
         #json_url = "CREATE TABLE IF NOT EXISTS json_url (data text)"
         # WHATCHOUT! Added two indeces to make both get_records() and get_items() faster,
         # but chan take up too much space when dealing with a lot of data
-        record_index = "CREATE INDEX IF NOT EXISTS recordIndex ON records (description ASC)"
-        owner_index = "CREATE INDEX IF NOT EXISTS ownIndex ON records (user ASC)"
+        # record_index = "CREATE INDEX IF NOT EXISTS recordIndex ON records (description ASC)"
+        # owner_index = "CREATE INDEX IF NOT EXISTS ownIndex ON records (user ASC)"
         self.conn.execute(table_statement)
-        self.conn.execute(decoded_url)
-        self.conn.execute(record_index)
-        self.conn.execute(owner_index)
         self.conn.commit()
 
     def get_records(self, llibre_donat_ins, llibre_buscat_ins):
@@ -32,7 +29,7 @@ class DB_SQLite:
         self.conn.execute(stmt, args)
         self.conn.commit()
 
-    
+
     def add_decoded_url(self, received_data):
         stmt = "INSERT INTO decoded_url (data) VALUES (?)"
         args = (received_data, )
