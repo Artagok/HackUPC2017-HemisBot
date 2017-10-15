@@ -11,7 +11,7 @@ from db_sqlite import DB_SQLite
 db = DB_SQLite()
 
 # personal pollution bot TOKEN. DELETE IT WHEN MAKING THE CODE PUBLIC:
-TOKEN = "421416141:AAHH_ikWOfrDjYK053Nx4uZaP1xQ5DwYkhc"
+TOKEN = "414307564:AAGnNWxMLuqRb7ly9pa4Xu5P939MVCz6pbE"
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 
 # the 'message' received is actually a link. Collect it:
@@ -51,9 +51,9 @@ def handle_updates(updates):
             chat = update["message"]["chat"]["id"]
             # start the analysis:
             if received_text == "/start":
-                send_message("Hi! I'm Drink Bot, send me your Location and I will give you the nearest fountain!", chat)
+                send_message("Hi! I'm Electric bot, send me your Location and I will show you the nearest charging point of the city!", chat)
             elif isinstance(received_text, str) or isinstance(received_text, int) or isinstance(received_text, float):
-                send_message("Please, introduce your Location", chat)
+                send_message("Please, introduce your location (click the clip on the right side of the keyboard)", chat)
             else:
                 send_message("I'm sorry, I didn't understand what you said here.")
             """
@@ -96,10 +96,27 @@ def handle_updates_location(updates):
                 send_text_location = str(received_latitude) + ", " + str(received_longitude)
                 send_message("I see you are on " + send_text_location, chat)
 
+                selected_place = check_placethuna(received_latitude, received_longitude)
+
             received_latitude = None
             received_longitude = None
         except KeyError: # usually at the start of the conversation
             pass
+
+
+def check_place(received_latitude, received_longitude)
+    #nombre = nombre.upper()
+    selected_coordinate = ''
+    with open('electric.csv', 'r') as f:
+      reader = csv.reader(f, delimiter=';')
+      for row in reader:
+        if row[3] == nombre:
+          id_departamento = row[2]
+          print(id_departamento)
+          print(nombre)
+          return(True)
+return False
+
 
 def get_last_chat_id_and_text(updates):
     num_updates = len(updates["result"])
