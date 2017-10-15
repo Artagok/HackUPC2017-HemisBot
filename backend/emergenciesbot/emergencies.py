@@ -49,38 +49,59 @@ def get_last_update_id(updates):
 # most important! process the input and define the output:
 def handle_updates(updates):
     
+    global description
+    global place
+    global time_t
+    
     global action_asked
     global description_asked
     global place_asked
     global time_asked
+    global continua
     
     for update in updates["result"]:
         try:
             received_text = update["message"]["text"]
             chat = update["message"]["chat"]["id"]
             # start the analysis:
-            if received_text == "/start":
+            if received_text == "/start" or continua == True:
                 send_message("Hi! I'm the emergencies bot!\nType *add* in order to append an emergency\nType *view* to consult the current emergencies",chat)
                 action_asked = True
-                
+                continua = False
+            
             elif action_asked == True:
-                print(received_text)
+                action_asked = False
                 if received_text == "view":
-                    x = db.get_records();
-                    print(len(x))
-                    if len(x) > 0:
-                        send_message("Here is the list of the current emergencies:",chat)
-                        #for i in x[i]:
-                         #   send_message("Description: " + x[i][0] + "\n Place: " + x[i][1] + "\nTime: " + x[i][2] + "\n",chat)
-                    else: 
-                        send_message("There are no emergencies at the moment",chat)
-                    
+                    send_message("Here are the current emergencies: \n",chat)
+                    x = db.get_records()
+                    for i in range (0,len(x)):
+                        send_message("Description: " + x[i][0] + "\nPlace: " + x[i][1] + "\nTime: " + x[i][2], chat)
+                        time.sleep(1)
+                        continua = True;
                 elif received_text == "add":
-                    send_message("First of all, give us a brief description of the situation",chat)
-                    
-                else:
-                    send_message("I don't understand you, sorry!")
-
+                    send_message("Please, give us a brief description about the situation", chat)
+                    description_asked = True
+            
+            elif description_asked:
+                description_asked = False
+                description = received_text
+                send_message("Where has it happened?", chat)
+                place_asked = True
+            
+            elif place_asked:
+                place_asked = False
+                place = received_text
+                send_message("What time was it?", chat)
+                time_asked = True
+            
+            elif time_asked:
+                time_asked = False
+                time_t = received_text
+                send_message("Thank you very much for your submission!",chat)
+                time_asked = False
+                db.add_record(description,place,time_t)
+                continua = True
+            
             else:
                 send_message("I don't understand you, sorry!",chat)
         except: # usually at the start of the conversation 
@@ -112,7 +133,7 @@ def send_message(text, chat_id, reply_markup=None):
 # get_updates is the responsible of the Long Polling:
 def main():
     #db.delete_all()
-    #db.setup()
+    db.setup()
     last_update_id = None
     while True:
         updates = get_updates(last_update_id)
