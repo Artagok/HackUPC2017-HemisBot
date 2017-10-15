@@ -126,7 +126,7 @@ def main():
             handle_updates(updates)
         # elif sendlocation_string in updates:
         else:
-            last_update_id = get_last_update_id(updates) + 1
+            # last_update_id = get_last_update_id(updates) + 1
             handle_updates_location(updates)
         time.sleep(0.5)
 
