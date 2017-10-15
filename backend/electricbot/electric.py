@@ -120,7 +120,7 @@ def check_place(received_latitude, received_longitude, chat):
                 if result_lat < selected_coordinate_latitude:
                     selected_coordinate_latitude = result_lat
                     resultat = row[12]
-
+    return resultat
 """
             value_row_long = row[11]
             if isinstance(value_row_lat, float) and isinstance(value_row_long, float):
@@ -135,7 +135,7 @@ def check_place(received_latitude, received_longitude, chat):
                     #selected_coordinate_latitude = value_row_lat
                     #selected_coordinate_longitude = value_row_long
 """
-    return resultat
+
 
 
 def get_last_chat_id_and_text(updates):
