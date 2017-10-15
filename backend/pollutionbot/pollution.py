@@ -48,6 +48,37 @@ def get_last_update_id(updates):
 def handle_updates(updates):
     for update in updates["result"]:
         try:
+            received_text = update["message"]["text"]
+            chat = update["message"]["chat"]["id"]
+            # start the analysis:
+            if received_text == "/start":
+                send_message("What up my boy! Tell me whatever...", chat)
+            elif received_text == "locate me":
+                send_location(chat, 41.3880040, 2.1132800, reply_markup=None)
+            else:
+                records = db.get_records(chat)
+                if received_text in records:
+                    db.delete_record(received_text, chat)
+                    send_message("Record deleted!", chat)
+                elif received_text == "Nil":
+                    send_message("lol this man doesn't even like coffe", chat)
+                elif received_text == "Pau":
+                    send_message("yoh this man can't sleep on the floor", chat)
+                else:
+                    tosend_text = "You told me " + received_text + ". I'll save that. Your current list is (repeat an record to delete it):"
+                    send_message(tosend_text, chat)
+                    db.add_record(received_text, chat)
+                    records = db.get_records(chat)
+                    all_records = "\n".join(records)
+                    send_message(all_records, chat)
+        except KeyError: # usually at the start of the conversation
+            pass
+
+
+# most important! process the input and define the output:
+def handle_updates_location(updates):
+    for update in updates["result"]:
+        try:
             chat = update["message"]["chat"]["id"]
 
             # check if it's a location
@@ -55,38 +86,15 @@ def handle_updates(updates):
             received_longitude = update["message"]["location"]["longitude"]
 
             #provisional_value = 0 + received_latitude
-            if isinstance(received_latitude, float):
+            if isinstance(received_latitude, float): #actually unneeded
                 send_text_location = str(received_latitude) + ", " + str(received_longitude)
                 send_message("Thats a location man... You're on " + send_text_location, chat)
-            else:
-                received_text = update["message"]["text"]
-                chat = update["message"]["chat"]["id"]
-                # start the analysis:
-                if received_text == "/start":
-                    send_message("What up my boy! Tell me whatever...", chat)
-                elif received_text == "locate me":
-                    send_location(chat, 41.3880040, 2.1132800, reply_markup=None)
-                else:
-                    records = db.get_records(chat)
-                    if received_text in records:
-                        db.delete_record(received_text, chat)
-                        send_message("Record deleted!", chat)
-                    elif received_text == "Nil":
-                        send_message("lol this man doesn't even like coffe", chat)
-                    elif received_text == "Pau":
-                        send_message("yoh this man can't sleep on the floor", chat)
-                    else:
-                        tosend_text = "You told me " + received_text + ". I'll save that. Your current list is (repeat an record to delete it):"
-                        send_message(tosend_text, chat)
-                        db.add_record(received_text, chat)
-                        records = db.get_records(chat)
-                        all_records = "\n".join(records)
-                        send_message(all_records, chat)
+
             received_latitude = None
             received_longitude = None
         except KeyError: # usually at the start of the conversation
             pass
-
+"""
 def handle_updates_location(updates):
     for update in updates["result"]:
         try:
@@ -97,7 +105,7 @@ def handle_updates_location(updates):
             send_message(to_send, chat)
         except KeyError:
             pass
-
+"""
 def get_last_chat_id_and_text(updates):
     num_updates = len(updates["result"])
     last_update = num_updates - 1
@@ -137,6 +145,7 @@ def main():
         if len(updates["result"]) > 0:
             last_update_id = get_last_update_id(updates) + 1
             handle_updates(updates)
+            handle_updates_location(updates)
         time.sleep(0.5)
 
 
