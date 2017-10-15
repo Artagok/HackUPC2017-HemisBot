@@ -96,15 +96,15 @@ def handle_updates_location(updates):
                 send_text_location = str(received_latitude) + ", " + str(received_longitude)
                 send_message("I see you are on " + send_text_location, chat)
 
-                selected_place = check_place(received_latitude, received_longitude)
+                selected_place = check_place(received_latitude, received_longitude, chat)
                 send_message("The nearest charging point can be found at " + selected_place, chat)
             received_latitude = None
             received_longitude = None
         except KeyError: # usually at the start of the conversation
             pass
-
+t
 # 11 i 12 (x i y), 13 direccion i 14 distrito
-def check_place(received_latitude, received_longitude):
+def check_place(received_latitude, received_longitude, chat):
     #nombre = nombre.upper()
     selected_coordinate_latitude = 100000000
     selected_coordinate_longitude = 100000000
@@ -113,6 +113,7 @@ def check_place(received_latitude, received_longitude):
       reader = csv.reader(f, delimiter=',')
       for row in reader:
         if row[10] is not None:
+            send_message("HEY!", chat)
             value_row_lat = row[10]
             value_row_long = row[11]
             if isinstance(value_row_lat, float) and isinstance(value_row_long, float):
