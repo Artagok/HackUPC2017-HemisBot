@@ -78,7 +78,7 @@ def handle_updates(updates):
                     time.sleep(2)
                     send_message("Do you need more info?\n1) Monuments\n2) Hospitals\n3) Tourist Info Points", chat)
                 else:
-                    send_message("Unexpected error", chat)
+                    send_message("I can't understand you.", chat)
         except KeyError: # usually at the start of the conversation
             pass
             

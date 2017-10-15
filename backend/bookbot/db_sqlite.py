@@ -7,7 +7,7 @@ class DB_SQLite:
         self.conn = sqlite3.connect(dbname)
 
     def setup(self):
-        table_statement = "CREATE TABLE IF NOT EXISTS person (nom text NOT NULL, telf integer NOT NULL, mail text, barri text, llibre_buscat text, llibre_donat text, PRIMARY KEY (nom, telf))"
+        table_statement = "CREATE TABLE IF NOT EXISTS person (nom text NOT NULL, telf text NOT NULL, mail text, barri text, llibre_buscat text, llibre_donat text, PRIMARY KEY (nom, telf))"
         # pure_url = "CREATE TABLE IF NOT EXISTS pure_url (data  real)"
         decoded_url = "CREATE TABLE IF NOT EXISTS decoded_url (data text)"
         #json_url = "CREATE TABLE IF NOT EXISTS json_url (data text)"
@@ -22,12 +22,12 @@ class DB_SQLite:
         self.conn.commit()
 
     def get_records(self, llibre_donat_ins, llibre_buscat_ins):
-        stmt = "SELECT nom, telf, mail, barri FROM person WHERE (llibre_buscat = (?) AND llibre_donat = (?) )"
-        args = (user, llibre_donat_ins, llibre_buscat_ins)
-        return [x[0] for x in self.conn.execute(stmt, args)]
+        stmt = "SELECT nom, telf, mail, barri FROM person WHERE (llibre_buscat = (?) AND llibre_donat = (?))"
+        args = (llibre_donat_ins, llibre_buscat_ins)
+        return [x for x in self.conn.execute(stmt, args)]
 
     def add_record(self, nom, telf, mail, barri, llibre_buscat, llibre_donat):
-        stmt = "INSERT INTO records (nom, telf, mail, barri, llibre_buscat, llibre_donat) VALUES (?, ?, ?, ?, ?, ?)"
+        stmt = "INSERT INTO person (nom, telf, mail, barri, llibre_buscat, llibre_donat) VALUES (?, ?, ?, ?, ?, ?)"
         args = (nom, telf, mail, barri, llibre_buscat, llibre_donat)
         self.conn.execute(stmt, args)
         self.conn.commit()
@@ -43,5 +43,10 @@ class DB_SQLite:
         stmt = "DELETE FROM person WHERE nom = (?) AND telf = (?)"
         args = (nom, telf)
         self.conn.execute(stmt, args)
+        self.conn.commit()
+
+    def delete_all(self):
+        stmt = "DROP TABLE person"
+        self.conn.execute(stmt)
         self.conn.commit()
 # Ignasi Oliver, Pau Nunez, Nil Quera, @HACKUPC Fall 2017

@@ -15,9 +15,6 @@ db = DB_SQLite()
 TOKEN = "454767750:AAEp2sdrBVTe70vX5XHdNuwJfNaklYz3rEo"
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 
-global bool_nom;
-bool_nom = False;
-
 # the 'message' received is actually a link. Collect it:
 def get_url(url):
     response = requests.get(url)
@@ -51,16 +48,70 @@ def get_last_update_id(updates):
 
 # most important! process the input and define the output:
 def handle_updates(updates):
+
+    global name_asked
+    global book_buscat_asked
+    global book_donat_asked
+    global telf_asked
+    global mail_asked
+    global barri_asked
+
+    global name
+    global book_buscat
+    global book_donat
+    global telf
+    global mail
+    global barri
+    
     for update in updates["result"]:
         try:
             received_text = update["message"]["text"]
             chat = update["message"]["chat"]["id"]
             # start the analysis:
-            if received_text == "/start" and not bool_nom:
+            if received_text == "/start":
                 send_message("Hi! I'm the book bot.",chat)
                 send_message("First of all, could you tell me your name please?",chat)
-                bool_nom = True;
-                
+                name_asked = True
+            elif name_asked == True:
+                name = received_text
+                name_asked = False
+                send_message("Now, tell me which particular book you are looking for, please.",chat)
+                book_buscat_asked = True
+            elif book_buscat_asked == True:
+                book_buscat = received_text
+                book_buscat_asked = False
+                send_message("And which book are you willing to give in exchange?", chat)
+                book_donat_asked = True
+            elif book_donat_asked == True:
+                book_donat = received_text
+                book_donat_asked = False
+                send_message("Now we will need your phone number.",chat)
+                telf_asked = True
+            elif telf_asked == True:
+                telf = received_text
+                telf_asked = False
+                send_message("Thank you! And which is your email?",chat)
+                mail_asked = True
+            elif mail_asked == True:
+                mail = received_text
+                mail_asked = False
+                send_message("And finally, we'd like to know your neighborhood.", chat)
+                barri_asked = True
+            elif barri_asked == True:
+                barri = received_text
+                barri_asked = False
+                send_message("Perfect! We will store your data and, as soon as we find a match, you'll be put in contact with the exchanger", chat)
+
+                db.add_record(name, telf, mail, barri, book_buscat, book_donat)
+                x = db.get_records(book_donat, book_buscat)
+                if len(x)>0:
+                    send_message("Congrats, we found a match!",chat)
+                    time.sleep(2)
+                    send_message("We'll give you his/her contact info so that you can meet each other:",chat)
+                    time.sleep(3)
+                    send_message("Name: " + x[0][0] + '\n' + "Phone number: " + x[0][1] + '\n' + "E-mail: " + x[0][2] + '\n' + "Neighborhood: " + x[0][3],chat)
+                    db.delete_record(name, telf)
+                    db.delete_record(x[0][0],x[0][1])
             else:
                 send_message("I don't understand you, sorry!",chat)
         except KeyError: # usually at the start of the conversation
@@ -91,6 +142,7 @@ def send_message(text, chat_id, reply_markup=None):
 
 # get_updates is the responsible of the Long Polling:
 def main():
+    #db.delete_all()
     db.setup()
     last_update_id = None
     while True:
