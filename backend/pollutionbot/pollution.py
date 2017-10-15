@@ -52,11 +52,7 @@ def handle_updates(updates):
 
             # check if it's a location
             received_location = update["message"]["location"]["latitude"]
-            if received_location not None:
-                send_text_location = str(received_location)
-                send_message("Thats a location man... You're on " + send_text_location, chat)
-
-            else:
+            if received_location is None:
                 received_text = update["message"]["text"]
                 chat = update["message"]["chat"]["id"]
                 # start the analysis:
@@ -80,6 +76,9 @@ def handle_updates(updates):
                         records = db.get_records(chat)
                         all_records = "\n".join(records)
                         send_message(all_records, chat)
+            else:
+                send_text_location = str(received_location)
+                send_message("Thats a location man... You're on " + send_text_location, chat)
         except KeyError: # usually at the start of the conversation
             pass
 
