@@ -133,6 +133,7 @@ def send_location(chat_id, latitude, longitude, reply_markup=None):
 # get_updates is the responsible of the Long Polling:
 def main():
     db.setup()
+
     last_update_id = None
     while True:
         updates = get_updates(last_update_id)
