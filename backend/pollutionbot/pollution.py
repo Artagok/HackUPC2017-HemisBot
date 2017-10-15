@@ -48,7 +48,7 @@ def get_last_update_id(updates):
 def handle_updates(updates):
     for update in updates["result"]:
         try:
-            if location in update:
+            if "location" in update:
                 chat = update["message"]["chat"]["id"]
                 send_message("MAN THAT'S A location!", chat)
             else:
