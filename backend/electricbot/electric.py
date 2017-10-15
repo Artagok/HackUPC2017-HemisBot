@@ -96,26 +96,36 @@ def handle_updates_location(updates):
                 send_text_location = str(received_latitude) + ", " + str(received_longitude)
                 send_message("I see you are on " + send_text_location, chat)
 
-                selected_place = check_placethuna(received_latitude, received_longitude)
-
+                selected_place = check_place(received_latitude, received_longitude)
+                send_message("The nearest charging point can be found at " + selected_place, chat)
             received_latitude = None
             received_longitude = None
         except KeyError: # usually at the start of the conversation
             pass
 
-
+# 11 i 12 (x i y), 13 direccion i 14 distrito
 def check_place(received_latitude, received_longitude):
     #nombre = nombre.upper()
-    selected_coordinate = ''
+    selected_coordinate_latitude = 100000000
+    selected_coordinate_longitude = 100000000
+    resultat = "S'ha produit un error"
     with open('electric.csv', 'r') as f:
       reader = csv.reader(f, delimiter=';')
       for row in reader:
-        if row[3] == nombre:
-          id_departamento = row[2]
-          print(id_departamento)
-          print(nombre)
-          return(True)
-    return False
+        if row[10] != None:
+          value_row_lat = row[10]
+          value_row_long = row[11]
+          result_lat = abs(value_row_lat - received_latitude)
+          result_long = abs(value_row_long - received_longitude)
+
+          current_selected_overall_value = abs(selected_coordinate_latitude - selected_coordinate_longitude)
+          current_result_overall_value = abs(result_lat - result_long)
+
+          if (current_result_overall_value < current_selected_overall_value):
+              resultat = row[12]
+              #selected_coordinate_latitude = value_row_lat
+              #selected_coordinate_longitude = value_row_long
+    return resultat
 
 
 def get_last_chat_id_and_text(updates):
