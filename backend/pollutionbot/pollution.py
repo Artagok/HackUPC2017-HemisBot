@@ -51,8 +51,9 @@ def handle_updates(updates):
             chat = update["message"]["chat"]["id"]
 
             # check if it's a location
-            received_location = update["message"]["location"]["latitude"]
-            if received_location is None:
+            received_latitude = update["message"]["location"]["latitude"]
+            received_longitude = update["message"]["location"]["longitude"]
+            if received_latitude is None:
                 received_text = update["message"]["text"]
                 chat = update["message"]["chat"]["id"]
                 # start the analysis:
@@ -77,18 +78,20 @@ def handle_updates(updates):
                         all_records = "\n".join(records)
                         send_message(all_records, chat)
             else:
-                send_text_location = str(received_location)
+                send_text_location = str(received_latitude) + str(received_longitude)
                 send_message("Thats a location man... You're on " + send_text_location, chat)
+            received_latitude = None
+            received_longitude = None
         except KeyError: # usually at the start of the conversation
             pass
 
 def handle_updates_location(updates):
     for update in updates["result"]:
         try:
-            received_location_latitude = update["result"]["message"]["location"]["latitude"]
-            received_location_longitude = update["result"]["message"]["location"]["longitude"]
+            received_latitude_latitude = update["result"]["message"]["location"]["latitude"]
+            received_latitude_longitude = update["result"]["message"]["location"]["longitude"]
             chat = update["message"]["chat"]["id"]
-            to_send = "My man you are at" + received_location_latitude + ", " + received_location_longitude
+            to_send = "My man you are at" + received_latitude_latitude + ", " + received_latitude_longitude
             send_message(to_send, chat)
         except KeyError:
             pass
