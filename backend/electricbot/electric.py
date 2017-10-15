@@ -115,6 +115,16 @@ def check_place(received_latitude, received_longitude, chat):
         if row[10] is not None:
             value_row_lat = row[10]
             send_message(value_row_lat, chat)
+
+            value_row_lat1 = row[11]
+            send_message(value_row_lat1, chat)
+
+            value_row_lat2 = row[12]
+            send_message(value_row_lat2, chat)
+
+            value_row_lat3 = row[13]
+            send_message(value_row_lat3, chat)
+
             if isinstance(value_row_lat, float):
                 result_lat = abs(value_row_lat - received_latitude)
                 if result_lat < selected_coordinate_latitude:
