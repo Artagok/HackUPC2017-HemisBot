@@ -123,7 +123,9 @@ def main():
         sendlocation_string = "location"
         if len(updates["result"]) > 0:
             if sendlocation_string in updates:
+                print("Hola")
                 last_update_id = get_last_update_id(updates) + 1
+
                 handle_updates_location(updates)
             else:
                 last_update_id = get_last_update_id(updates) + 1
