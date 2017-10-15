@@ -11,14 +11,13 @@ from db_sqlite import DB_SQLite
 db = DB_SQLite()
 
 # personal pollution bot TOKEN. DELETE IT WHEN MAKING THE CODE PUBLIC:
-TOKEN = "464368472:AAGfh1lZGi-B7Afty2dY8GWgoS27vKUO1og"
+TOKEN = "421416141:AAHH_ikWOfrDjYK053Nx4uZaP1xQ5DwYkhc"
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 
 # the 'message' received is actually a link. Collect it:
 def get_url(url):
     response = requests.get(url)
     content = response.content.decode("utf8")
-    db.add_decoded_url(content)
     return content
 
 # Now load that link to json:
@@ -52,9 +51,15 @@ def handle_updates(updates):
             chat = update["message"]["chat"]["id"]
             # start the analysis:
             if received_text == "/start":
-                send_message("What up my boy! Tell me whatever...", chat)
+                send_message("Hi! I'm Drink Bot, send me your Location and I will give you the nearest fountain!", chat)
+            elif isinstance(received_text, str) or isinstance(received_text, int) or isinstance(received_text, float):
+                send_message("Please, introduce your Location", chat)
+            else:
+                send_message("I'm sorry, I didn't understand what you said here.")
+            """
             elif received_text == "locate me":
-                send_location(chat, 41.3880040, 2.1132800, reply_markup=None)
+                send_message("Please, introduce your Location")
+                #send_location(chat, 41.3880040, 2.1132800, reply_markup=None)
             else:
                 records = db.get_records(chat)
                 if received_text in records:
@@ -71,6 +76,7 @@ def handle_updates(updates):
                     records = db.get_records(chat)
                     all_records = "\n".join(records)
                     send_message(all_records, chat)
+            """
         except KeyError: # usually at the start of the conversation
             pass
 
@@ -88,24 +94,13 @@ def handle_updates_location(updates):
             #provisional_value = 0 + received_latitude
             if isinstance(received_latitude, float): #actually unneeded
                 send_text_location = str(received_latitude) + ", " + str(received_longitude)
-                send_message("Thats a location man... You're on " + send_text_location, chat)
+                send_message("I see you are on " + send_text_location, chat)
 
             received_latitude = None
             received_longitude = None
         except KeyError: # usually at the start of the conversation
             pass
-"""
-def handle_updates_location(updates):
-    for update in updates["result"]:
-        try:
-            received_latitude_latitude = update["result"]["message"]["location"]["latitude"]
-            received_latitude_longitude = update["result"]["message"]["location"]["longitude"]
-            chat = update["message"]["chat"]["id"]
-            to_send = "My man you are at" + received_latitude_latitude + ", " + received_latitude_longitude
-            send_message(to_send, chat)
-        except KeyError:
-            pass
-"""
+
 def get_last_chat_id_and_text(updates):
     num_updates = len(updates["result"])
     last_update = num_updates - 1
@@ -138,6 +133,7 @@ def send_location(chat_id, latitude, longitude, reply_markup=None):
 # get_updates is the responsible of the Long Polling:
 def main():
     db.setup()
+
     last_update_id = None
     while True:
         updates = get_updates(last_update_id)
