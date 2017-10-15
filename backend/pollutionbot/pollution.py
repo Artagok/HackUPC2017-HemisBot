@@ -51,7 +51,7 @@ def handle_updates(updates):
             if True:
             #if "location" in update:
                 chat = update["message"]["chat"]["id"]
-                send_message(result, chat)
+                send_message(update, chat)
             #else:
                 received_text = update["message"]["text"]
                 chat = update["message"]["chat"]["id"]
