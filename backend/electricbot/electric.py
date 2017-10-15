@@ -102,7 +102,7 @@ def handle_updates_location(updates):
             received_longitude = None
         except KeyError: # usually at the start of the conversation
             pass
-t
+
 # 11 i 12 (x i y), 13 direccion i 14 distrito
 def check_place(received_latitude, received_longitude, chat):
     #nombre = nombre.upper()
