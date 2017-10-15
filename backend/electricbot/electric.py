@@ -113,8 +113,8 @@ def check_place(received_latitude, received_longitude):
       reader = csv.reader(f, delimiter=',')
       for row in reader:
         if row[10] is not None:
-          value_row_lat = row[10]
-          value_row_long = row[11]
+          value_row_lat = float(row[10])
+          value_row_long = float(row[11])
           result_lat = abs(value_row_lat - received_latitude)
           result_long = abs(value_row_long - received_longitude)
 
