@@ -125,8 +125,8 @@ def main():
             if sendlocation_string in updates:
                 handle_updates_location(updates)
             else:
-            last_update_id = get_last_update_id(updates) + 1
-            handle_updates(updates)
+                last_update_id = get_last_update_id(updates) + 1
+                handle_updates(updates)
         # elif sendlocation_string in updates:
         #else:
             # last_update_id = get_last_update_id(updates) + 1
