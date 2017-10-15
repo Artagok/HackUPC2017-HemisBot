@@ -113,18 +113,19 @@ def check_place(received_latitude, received_longitude):
       reader = csv.reader(f, delimiter=',')
       for row in reader:
         if row[10] is not None:
-          value_row_lat = float(row[10])
-          value_row_long = float(row[11])
-          result_lat = abs(value_row_lat - received_latitude)
-          result_long = abs(value_row_long - received_longitude)
+            value_row_lat = row[10]
+            value_row_long = row[11]
+            if isinstance(value_row_lat, float) and isinstance(value_row_long, float)
+                result_lat = abs(value_row_lat - received_latitude)
+                result_long = abs(value_row_long - received_longitude)
 
-          current_selected_overall_value = abs(selected_coordinate_latitude - selected_coordinate_longitude)
-          current_result_overall_value = abs(result_lat - result_long)
+                current_selected_overall_value = abs(selected_coordinate_latitude - selected_coordinate_longitude)
+                current_result_overall_value = abs(result_lat - result_long)
 
-          if (current_result_overall_value < current_selected_overall_value):
-              resultat = row[12]
-              #selected_coordinate_latitude = value_row_lat
-              #selected_coordinate_longitude = value_row_long
+                if (current_result_overall_value < current_selected_overall_value):
+                    resultat = row[12]
+                    #selected_coordinate_latitude = value_row_lat
+                    #selected_coordinate_longitude = value_row_long
     return resultat
 
 
