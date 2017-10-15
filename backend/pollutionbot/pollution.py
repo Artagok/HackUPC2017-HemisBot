@@ -60,7 +60,7 @@ def handle_updates(updates):
                 send_message("Thats a location man... You're on " + send_text_location, chat)
 
             #else:
-            except ValueError:
+        except TypeError:
                 received_text = update["message"]["text"]
                 chat = update["message"]["chat"]["id"]
                 # start the analysis:
