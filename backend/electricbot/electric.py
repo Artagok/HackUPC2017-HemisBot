@@ -112,7 +112,7 @@ def check_place(received_latitude, received_longitude):
     with open('electric.csv', 'r') as f:
       reader = csv.reader(f, delimiter=';')
       for row in reader:
-        if row[10] != None:
+        if row[10] is not None:
           value_row_lat = row[10]
           value_row_long = row[11]
           result_lat = abs(value_row_lat - received_latitude)
