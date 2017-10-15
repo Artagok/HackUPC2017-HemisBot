@@ -62,7 +62,7 @@ def handle_updates(updates):
     global telf
     global mail
     global barri
-    
+
     for update in updates["result"]:
         try:
             received_text = update["message"]["text"]
@@ -114,9 +114,9 @@ def handle_updates(updates):
                     db.delete_record(x[0][0],x[0][1])
             else:
                 send_message("I don't understand you, sorry!",chat)
-        except KeyError: # usually at the start of the conversation
+        except: # usually at the start of the conversation
             pass
-            
+
 def get_last_chat_id_and_text(updates):
     num_updates = len(updates["result"])
     last_update = num_updates - 1
